@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -18,7 +17,7 @@ const (
 func CleanSuffix(path string) string {
 	if strings.HasSuffix(path, cacheInfoSuffix) {
 		path = strings.TrimSuffix(path, cacheInfoSuffix)
-	} else if strings.HasSuffix(path, cacheTmpSuffix) {
+	} else {
 		path = strings.TrimSuffix(path, cacheTmpSuffix)
 	}
 	path = filepath.Clean(path)
@@ -70,22 +69,6 @@ func DirInfo(dir string) []string {
 		return nil
 	})
 	return tmp
-}
-
-// convert file size int to string
-func sizeConvert(s int64) string {
-	t := []string{"B", "KB", "MB", "GB"}
-	i := 0
-	p := float64(s)
-	for ; i < 4; i++ {
-		q := p * 1.0 / 1024
-		if q > 1 {
-			p = q
-			continue
-		}
-		break
-	}
-	return strconv.FormatFloat(p, 'f', 1, 64) + t[i]
 }
 
 // Store cache file part store in .tmp

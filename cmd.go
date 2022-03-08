@@ -10,11 +10,13 @@ const (
 	defaultDir = "./download"
 )
 
+// ./app -url=http://url/to/file [-dir=/path/to/file]
+// url := "https://dl.google.com/go/go1.11.1.src.tar.gz"
 func CMD() error {
 	var dir, url, file string
 	tmpCmd := flag.NewFlagSet("tmp", flag.ExitOnError)
-	tmpCmd.StringVar(&dir, "dir", defaultDir, "tmp dir")
-	tmpCmd.StringVar(&file, "file", defaultDir, "tmp file")
+	tmpCmd.StringVar(&dir, "dir", defaultDir, "download all undone tmp file")
+	tmpCmd.StringVar(&file, "file", defaultDir, "download undone tmp file")
 
 	clnCmd := flag.NewFlagSet("clean", flag.ExitOnError)
 	clnCmd.StringVar(&dir, "dir", defaultDir, "clean tmp dir.")

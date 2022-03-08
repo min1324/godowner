@@ -9,11 +9,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"progress"
 	"strconv"
 )
 
-func downAll(url, dir string, bar *progress.Bar) error {
+func downAll(url, dir string, bar *ProcessBar) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -30,7 +29,7 @@ func downAll(url, dir string, bar *progress.Bar) error {
 	return err
 }
 
-func downPart(url string, fp FilePart, bar *progress.Bar) ([]byte, error) {
+func downPart(url string, fp FilePart, bar *ProcessBar) ([]byte, error) {
 	r, err := newRequest("GET", url)
 	if err != nil {
 		return nil, err
@@ -42,7 +41,7 @@ func downPart(url string, fp FilePart, bar *progress.Bar) ([]byte, error) {
 		return nil, err
 	}
 	if resp.StatusCode > 299 {
-		return nil, errors.New(fmt.Sprintf("服务器错误状态码: %v", resp.StatusCode))
+		return nil, fmt.Errorf(fmt.Sprintf("服务器错误状态码: %v", resp.StatusCode))
 	}
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(io.TeeReader(resp.Body, bar))
@@ -62,7 +61,7 @@ func checkHead(url string) (name string, size int, e error) {
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode > 299 {
-		return "", 0, errors.New(fmt.Sprintf("Can't process, response is %v", rsp.StatusCode))
+		return "", 0, fmt.Errorf(fmt.Sprintf("Can't process, response is %v", rsp.StatusCode))
 	}
 	//检查是否支持 断点续传
 	if rsp.Header.Get("Accept-Ranges") != "bytes" {

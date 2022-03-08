@@ -2,7 +2,6 @@ package main
 
 import (
 	"path/filepath"
-	"progress"
 )
 
 // Clean tmp dir.
@@ -72,7 +71,7 @@ func FromDir(dir string) error {
 func down(c *Cache) error {
 
 	// progress bar
-	bar := progress.Default(c.info.Size)
+	bar := NewProcessBar(c.info.Size, 0)
 	defer bar.Close()
 	bar.Add(c.info.cur)
 
